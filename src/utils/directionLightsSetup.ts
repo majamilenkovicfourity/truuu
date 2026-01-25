@@ -67,8 +67,8 @@ scene.add(ambientLight);
     directionalLight2.shadow.camera.top = 30;
     directionalLight2.shadow.camera.bottom = -39;
     directionalLight2.shadow.camera.updateProjectionMatrix();
-    directionalLight2.shadow.mapSize.width = 2048;
-    directionalLight2.shadow.mapSize.height = 2048;
+    directionalLight2.shadow.mapSize.width = 1024;
+    directionalLight2.shadow.mapSize.height = 1024;
 
     const directionalLight2Props = sheet.object('DirectionalLight2', {
         x: directionalLight2.position.x,

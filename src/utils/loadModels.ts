@@ -172,7 +172,7 @@ async function loadObjects(): Promise<LoadedModels | undefined> {
 // Load the third model separately
 async function loadThirdModel(loader: GLTFLoader, result: LoadedModels): Promise<void> {
     try {
-        const plainNewGLTF = await loader.loadAsync('models/Plain.glb');
+        const plainNewGLTF = await loader.loadAsync('models/PlainNew.glb');
         const plainNewSetup = setupPlainModelNew(plainNewGLTF.scene, plainNewGLTF.animations);
         
         // Update the result object with the third model

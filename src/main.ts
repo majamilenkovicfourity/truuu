@@ -6,7 +6,7 @@ import loadObjects from './utils/loadModels';
 import { getProject } from '@theatre/core';
 import { setupDirectionalLight } from './utils/directionLightsSetup';
 
-import projectState from '../public/states/TruuStates5.json'
+import projectState from '../public/states/TruuStates6.json'
 import { updatePlantAnimation } from './animations/grassAnimation';
 import { updateBottleGlassAnimation } from './animations/bottleGlassAnimation';
 import { updateParticleAnimation } from './animations/particleAnimation';
@@ -21,7 +21,7 @@ let scrollProgress = 0;
 let currentPosition = 0;
 let targetPosition = 0;
 
-// studio.initialize();
+studio.initialize();
 
 window.addEventListener("load", () => {
   const loader = document.getElementById("loader");
@@ -282,7 +282,7 @@ function showVideoModal(videoConfig: VideoConfig) {
   
   // Create iframe
   const iframe = document.createElement('iframe');
-  iframe.src = `https://player.vimeo.com/video/${videoConfig.vimeoId}?autoplay=1&muted=1`;
+  iframe.src = `https://player.vimeo.com/video/${videoConfig.vimeoId}?autoplay=1&muted=0`;
   iframe.style.cssText = `
     width: 90vw !important;
     height: 90vh !important;
