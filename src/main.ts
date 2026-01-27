@@ -6,22 +6,24 @@ import loadObjects from './utils/loadModels';
 import { getProject } from '@theatre/core';
 import { setupDirectionalLight } from './utils/directionLightsSetup';
 
-import projectState from '../public/states/TruuStates6.json'
+import projectState from '../public/states/TruuStates7.json'
 import { updatePlantAnimation } from './animations/grassAnimation';
 import { updateBottleGlassAnimation } from './animations/bottleGlassAnimation';
 import { updateParticleAnimation } from './animations/particleAnimation';
-import { updateSilhouetteAnimation } from './animations/silhouetteAnimation';
+import { SilhouetteAnimation } from './animations/silhouetteAnimation';
 import { foodBodyAnimation } from './animations/foodBodyAnimation';
 import { carTruckAnimations } from './animations/carTruckAnimations';
 import { videos, type VideoConfig } from './utils/videoConfigs';
-import { setObjectOpacity, setOpacityRecursive } from './utils/fixShadows';
+import {  setObjectOpacity } from './utils/fixShadows';
+import { setBottleGlass } from './utils/bottleGlassEffect';
+import { setBottlePyramid } from './utils/setBottlePyramid';
 
 
 let scrollProgress = 0;
 let currentPosition = 0;
 let targetPosition = 0;
 
-studio.initialize();
+// studio.initialize();
 
 window.addEventListener("load", () => {
   const loader = document.getElementById("loader");
@@ -69,6 +71,19 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.set(0, 0, 30.6);
 
 
+
+  
+  //#region Theatre.js
+const project = getProject("Truu", { state: projectState });
+export const sheet = project.sheet("Scene");
+
+const sequence = sheet.sequence;
+const sceneSheet = projectState.sheetsById["Scene"];
+const sequenceLength = sceneSheet.sequence.length;
+
+const pixelsPerSecond = 8000; // Adjust this for scroll speed
+const scrollHeight = sequenceLength * pixelsPerSecond;
+
 //#region Models
 const object = await loadObjects();
 if (!object) {
@@ -78,6 +93,9 @@ if (!object) {
 // Add first two models immediately
 scene.add(object.earth);
 scene.add(object.plain);
+if(object.bottlePyramid){
+  setBottlePyramid(object.bottlePyramid, scene, sheet);
+}
 
 // Flag to track if third model is loaded
 let isPlainNewLoaded = false;
@@ -105,20 +123,11 @@ window.addEventListener('thirdModelLoaded', (event) => {
     const vPlainNew = plainObjNew.value;
     object.plainNew.position.set(vPlainNew.position.x, vPlainNew.position.y, vPlainNew.position.z);
     object.plainNew.rotation.set(vPlainNew.rotation.x, vPlainNew.rotation.y, vPlainNew.rotation.z);
+
+    setBottleGlass(object.plainNew, sheet);
   }
 });
 
-  
-  //#region Theatre.js
-const project = getProject("Truu", { state: projectState });
-const sheet = project.sheet("Scene");
-
-const sequence = sheet.sequence;
-const sceneSheet = projectState.sheetsById["Scene"];
-const sequenceLength = sceneSheet.sequence.length;
-
-const pixelsPerSecond = 8000; // Adjust this for scroll speed
-const scrollHeight = sequenceLength * pixelsPerSecond;
 
 document.body.style.height = `${scrollHeight}px`;
 
@@ -155,6 +164,7 @@ plainObj.onValuesChange((v) => {
 const plainObjNew = sheet.object("Plain New", {
   position: { x: -128, y: -2, z: 50 },
   rotation: { x: -0.2, y: 0, z: 0 },
+  visible: true,
 });
 
 plainObjNew.onValuesChange((v) => {
@@ -162,6 +172,7 @@ plainObjNew.onValuesChange((v) => {
   if (object?.plainNew && isPlainNewLoaded) {
     object.plainNew.position.set(v.position.x, v.position.y, v.position.z);
     object.plainNew.rotation.set(v.rotation.x, v.rotation.y, v.rotation.z);
+    object.plainNew.visible = v.visible;
   }
 });
 
@@ -383,10 +394,9 @@ window.addEventListener("scroll", updateScrollProgress);
 //#region Lights
 setupDirectionalLight(scene, sheet);
 
-
 //#region Animation Loop
 const clock = new THREE.Clock();
-
+let silhouetteAnim: SilhouetteAnimation | null = null;
 function animate() {
   requestAnimationFrame(animate);
 
@@ -439,9 +449,16 @@ function animate() {
       });
     }
     
-    if(object?.body){
-      updateSilhouetteAnimation(object.bottleGlass!,object?.plainNew!, scrollProgress,object?.body);
-    }
+   if (object?.bottleGlass && object?.plainNew && object?.body && !silhouetteAnim) {
+    silhouetteAnim = new SilhouetteAnimation(
+        object.bottleGlass,
+        object.plainNew,
+        object.body,
+        renderer
+    );
+}if (silhouetteAnim) {
+    silhouetteAnim.update(scrollProgress);
+}
   }
     
   if(scrollProgress >= 0.5729817609104303 && scrollProgress <= 0.6813663228843841 && isPlainNewLoaded){

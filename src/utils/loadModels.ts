@@ -12,6 +12,7 @@ interface LoadedModels {
     earth: THREE.Group;
     plain: THREE.Group;
     plainNew: THREE.Group | null; // Allow null initially
+    bottlePyramid: THREE.Group;
     plainTreesMesh: THREE.Mesh[];
     dragonFly?: THREE.Object3D;
     dragonflyMixer?: THREE.AnimationMixer;
@@ -111,18 +112,22 @@ async function loadObjects(): Promise<LoadedModels | undefined> {
 
     try {   
         // STAGE 1: Load first two models
-        const [earthGLTF, flatEarthGLTF] = await Promise.all([
+        const [earthGLTF, flatEarthGLTF, bottlePyramidGLTG] = await Promise.all([
             primaryLoader.loadAsync('compressedModels/earthSphere.glb'),
             primaryLoader.loadAsync('models/plainModelWithoutBG.glb'),
+            primaryLoader.loadAsync('models/BottlePyramides.glb'),
+
         ]);
 
         const earth = setupEarthModel(earthGLTF.scene);
         const plainSetup = setupPlainModel(flatEarthGLTF.scene, flatEarthGLTF.animations);
+        const bottlePiramid = bottlePyramidGLTG.scene;
         
         // Create initial result with null plainNew
         const result: LoadedModels = {
             earth,
             plain: plainSetup.plain,
+            bottlePyramid: bottlePiramid as THREE.Group,
             plainTreesMesh: plainSetup.plainTreesMesh,
             dragonFly: plainSetup.dragonFly,
             dragonflyMixer: plainSetup.dragonflyMixer,
@@ -172,7 +177,7 @@ async function loadObjects(): Promise<LoadedModels | undefined> {
 // Load the third model separately
 async function loadThirdModel(loader: GLTFLoader, result: LoadedModels): Promise<void> {
     try {
-        const plainNewGLTF = await loader.loadAsync('models/PlainNew.glb');
+        const plainNewGLTF = await loader.loadAsync('models/PlainLatest.glb');
         const plainNewSetup = setupPlainModelNew(plainNewGLTF.scene, plainNewGLTF.animations);
         
         // Update the result object with the third model
@@ -251,7 +256,11 @@ function setupPlainModel(plain: THREE.Group, animations: THREE.AnimationClip[]):
     plain.receiveShadow = true;
     plain.position.set(-128, -21.6, 78);
 
-    enableShadowsForModel(plain);
+    enableShadowsForModel(plain, 'First Plain Color');
+
+    const river = plain.getObjectByName('river');
+    enableShadowsForModel(river!, 'RIVER');
+
     setupPlainMesh(plain);
     const plainTreesMesh = setupPlainTrees(plain);
     const { dragonFly, dragonflyMixer } = setupDragonfly(plain, animations);

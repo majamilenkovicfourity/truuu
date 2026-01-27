@@ -3,6 +3,7 @@ import { enableShadowsForModel } from './fixShadows';
 import { getParticles, type ParticleGroups } from './setupParticle';
 import { setupScientist } from './setupScientist';
 import { createBottlePyramid } from './createBottlePiramides';
+import { setBottleGlass } from './bottleGlassEffect';
 
 
 export interface PlainSetupNew {
@@ -31,7 +32,11 @@ export function setupPlainModelNew(plain: THREE.Group, animations: THREE.Animati
     plain.receiveShadow = true;
     plain.position.set(-128, -0.603, 25.12);
 
-    enableShadowsForModel(plain);
+    enableShadowsForModel(plain, 'New Plain Color');
+
+    const river = plain.getObjectByName('river');
+    enableShadowsForModel(river!, 'RIVER2');
+
     plain.updateMatrixWorld(true);
 
     setupScientist(plain, 'Scientist_2');
@@ -48,7 +53,8 @@ export function setupPlainModelNew(plain: THREE.Group, animations: THREE.Animati
     bottleGlass.visible = false; // hide the object
 
     const bottle = bottleGlass.getObjectByName("bottle_pla_with_label_off__on")
-    if(bottle){
+   
+    if(bottle){        
         bottle.visible = false;
     }
      

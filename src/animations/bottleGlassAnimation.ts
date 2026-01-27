@@ -22,8 +22,7 @@ export function updateBottleGlassAnimation({
     if (!bottleGlassActions?.length) return;
 
     const { threshold, startTime } = ANIMATION_CONFIG;
-
-    const bottleLabel = bottleGlass.getObjectByName('bottle_pla_with_label_off__on');
+    const bottleLabel = bottleGlass.getObjectByName('bottle_pla_with_label_off__on');    
     const bottle = bottleGlass.getObjectByName('bottle_pla_on__off');
 
      if (bottleLabel) {
@@ -67,18 +66,5 @@ export function updateBottleGlassAnimation({
             action.play();
         });
       }
-
-      if (scrollProgress >= bottleLabelVisibilityFalse) {
-        // Hide the label
-        if (bottleLabel) {
-            bottleLabel.visible = false;
-        }
-        
-        // Resume animations in reverse
-        // bottleGlassActions.forEach(action => {
-        //     action.paused = false;
-        //     action.timeScale = -1; // Play backwards
-        //     action.play();
-        // });
-    }
+      
 }
