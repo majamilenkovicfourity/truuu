@@ -33,10 +33,7 @@ export class SilhouetteAnimation {
     }
 
     private init() {
-        // Enable clipping planes in renderer
-        this.renderer.localClippingEnabled = true;
-
-        // Get all objects
+        this.renderer.localClippingEnabled = true;       
         this.silhouette = this.plainNew.getObjectByName('Silhuette_outside_pla') || null;
         this.ipad = this.plainNew.getObjectByName('ipad_cam_04') || null;
 
@@ -53,7 +50,6 @@ export class SilhouetteAnimation {
                 head: head as THREE.Object3D
             };
 
-            // Initially hide all body parts
             this.bodyParts.bodyLegs.visible = false;
             this.bodyParts.bodyUpperLegs.visible = false;
             this.bodyParts.belly.visible = false;
@@ -85,7 +81,6 @@ export class SilhouetteAnimation {
             this.silhouette.visible = false;
         }
 
-        // Initially hide bottle
         this.bottleGlass.visible = false;
     }
 

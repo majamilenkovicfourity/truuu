@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { bottleLabelVisibilityFalse, labelVisibilityThreshold } from '../constatns';
+import { labelVisibilityThreshold } from '../constatns';
 
 interface BottleGlassAnimation {
     scrollProgress: number,
@@ -23,7 +23,7 @@ export function updateBottleGlassAnimation({
 
     const { threshold, startTime } = ANIMATION_CONFIG;
     const bottleLabel = bottleGlass.getObjectByName('bottle_pla_with_label_off__on');    
-    const bottle = bottleGlass.getObjectByName('bottle_pla_on__off');
+
 
      if (bottleLabel) {
         const shouldShowLabel = scrollProgress >= labelVisibilityThreshold;

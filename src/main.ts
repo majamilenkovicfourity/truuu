@@ -17,13 +17,14 @@ import { videos, type VideoConfig } from './utils/videoConfigs';
 import {  setObjectOpacity } from './utils/fixShadows';
 import { setBottleGlass } from './utils/bottleGlassEffect';
 import { setBottlePyramid } from './utils/setBottlePyramid';
+import { ipadSliderAnimation } from './animations/iPadSlideAnimation';
 
 
 let scrollProgress = 0;
 let currentPosition = 0;
 let targetPosition = 0;
 
-// studio.initialize();
+studio.initialize();
 
 window.addEventListener("load", () => {
   const loader = document.getElementById("loader");
@@ -108,8 +109,8 @@ if (object.plainNew) {
 }
 
 // Listen for third model loading
-window.addEventListener('thirdModelLoaded', (event) => {
-  console.log('Third model ready, adding to scene');
+window.addEventListener('thirdModelLoaded', (_event) => {
+  console.log('Third model ready!');
   if (object.plainNew && !isPlainNewLoaded) {
     scene.add(object.plainNew);
     isPlainNewLoaded = true;
@@ -151,12 +152,14 @@ earthObj.onValuesChange((v) => {
 const plainObj = sheet.object("FlatEarth", {
   position: { x: -128, y: -2, z: -4 },
   rotation: { x: 0, y: 0, z: 0 },
+  visible: true,
 });
 
 // Sync cube to Theatre values
 plainObj.onValuesChange((v) => {
   object?.plain.position.set(v.position.x, v.position.y, v.position.z);
   object?.plain.rotation.set(v.rotation.x, v.rotation.y, v.rotation.z);
+  object.plain.visible = v.visible;
   object?.plain.updateMatrixWorld(true);  
 });
 
@@ -248,10 +251,6 @@ function closeVideoModal(videoId: string) {
   const modal = document.getElementById(`videoModal-${videoId}`);
   if (modal) modal.remove();
 }
-
-const video = document.getElementById("videoPlay") as HTMLIFrameElement;
-let isVideoPlaying = false;
-let videoWasClosed = false;
 
 function showVideoModal(videoConfig: VideoConfig) {
   // Create a fresh container with inline styles
@@ -426,6 +425,10 @@ function animate() {
     }
   }
 
+
+  if(scrollProgress >= 0 && scrollProgress < 0.27){
+     ipadSliderAnimation(object?.plain!, scrollProgress);
+  }
   // Only update if all required objects exist AND plainNew is loaded
   if(scrollProgress > 0.2766177242629003 && scrollProgress < 0.534031058951040 && isPlainNewLoaded){
 
@@ -464,7 +467,7 @@ function animate() {
   if(scrollProgress >= 0.5729817609104303 && scrollProgress <= 0.6813663228843841 && isPlainNewLoaded){
 
     if (object?.plainNew) {
-      foodBodyAnimation(scrollProgress, object.plainNew);
+      foodBodyAnimation(scrollProgress, object.plainNew, renderer);
     }
   }
  

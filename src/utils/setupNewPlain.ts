@@ -2,9 +2,6 @@ import * as THREE from 'three';
 import { enableShadowsForModel } from './fixShadows';
 import { getParticles, type ParticleGroups } from './setupParticle';
 import { setupScientist } from './setupScientist';
-import { createBottlePyramid } from './createBottlePiramides';
-import { setBottleGlass } from './bottleGlassEffect';
-
 
 export interface PlainSetupNew {
     plain: THREE.Group;
@@ -35,7 +32,7 @@ export function setupPlainModelNew(plain: THREE.Group, animations: THREE.Animati
     enableShadowsForModel(plain, 'New Plain Color');
 
     const river = plain.getObjectByName('river');
-    enableShadowsForModel(river!, 'RIVER2');
+    enableShadowsForModel(river!, 'RIVER2');   
 
     plain.updateMatrixWorld(true);
 

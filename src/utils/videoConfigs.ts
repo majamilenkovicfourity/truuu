@@ -16,14 +16,14 @@ export const videos: VideoConfig[] = [
     wasClosed: false,
     isPlaying: false
   },
-  {
-    id: 'video2',
-    startThreshold: 0.24005486968449932,
-    endThreshold: 0.26376399261630173,
-    vimeoId: '358401068',
-    wasClosed: false,
-    isPlaying: false
-  },
+  // {
+  //   id: 'video2',
+  //   startThreshold: 0.24005486968449932,
+  //   endThreshold: 0.26376399261630173,
+  //   vimeoId: '358401068',
+  //   wasClosed: false,
+  //   isPlaying: false
+  // },
   {
     id: 'video3',
     startThreshold: 0.7203170248437738,

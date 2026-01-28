@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import type { ISheetObject } from "@theatre/core";
 
 export function setBottleGlass(
     plain: THREE.Object3D, 
@@ -101,7 +100,7 @@ export function setBottleGlass(
     }
 
     // Update glass material from Theatre.js
-    glassObj.onValuesChange((v) => {
+    glassObj.onValuesChange((v: any) => {
         if (bottle.children[0] instanceof THREE.Mesh) {
             const material = bottle.children[0].material as THREE.MeshPhysicalMaterial;
             material.color.set(v.color);
@@ -115,7 +114,7 @@ export function setBottleGlass(
     });
 
     // Update liquid material from Theatre.js
-    liquidObj.onValuesChange((v) => {
+    liquidObj.onValuesChange((v: any) => {
         if (bottle.children[1] instanceof THREE.Mesh) {
             const material = bottle.children[1].material as THREE.MeshPhysicalMaterial;
             material.color.set(v.color);

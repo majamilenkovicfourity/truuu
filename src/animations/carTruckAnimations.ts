@@ -1,7 +1,6 @@
 import * as THREE from "three";
-import type { IProject, ISheet } from "@theatre/core";
+import type { ISheet } from "@theatre/core";
 import { setObjectOpacity } from "../utils/fixShadows";
-import { instance } from "three/tsl";
 
 let car: THREE.Object3D | undefined = undefined;
 let carFrontGlass: THREE.Object3D | undefined = undefined;

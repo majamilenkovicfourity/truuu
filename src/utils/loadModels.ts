@@ -7,6 +7,7 @@ import { setupLiquid } from "./liquidSetup";
 import { setupGrass } from "./setupGrass";
 import { setupPlainModelNew } from "./setupNewPlain";
 import { BillboardSetup } from "./billboardVideosImage";
+import { ipadSliderSettings } from "./ipadSlider";
 
 interface LoadedModels {
     earth: THREE.Group;
@@ -42,7 +43,7 @@ const primaryLoadingManager = new THREE.LoadingManager();
 const secondaryLoadingManager = new THREE.LoadingManager();
 
 // Primary loading (first two models)
-primaryLoadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
+primaryLoadingManager.onProgress = (_url, itemsLoaded, itemsTotal) => {
     const progress = (itemsLoaded / itemsTotal) * 100;    
     const progressBar = document.getElementById('progress-bar');
     const progressText = document.getElementById('progress-text');
@@ -55,8 +56,7 @@ primaryLoadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
     }
 };
 
-primaryLoadingManager.onLoad = () => {        
-    console.log('Primary models loaded');
+primaryLoadingManager.onLoad = () => {
     // Hide loading screen after first two models are loaded
     const loadingScreen = document.getElementById('loading-screen');
     if (loadingScreen) {
@@ -68,7 +68,8 @@ primaryLoadingManager.onLoad = () => {
 };
 
 // Secondary loading (third model)
-secondaryLoadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
+secondaryLoadingManager.onProgress = (_url, itemsLoaded, itemsTotal) => {
+    
     const progress = (itemsLoaded / itemsTotal) * 100;
     console.log(`Loading additional content: ${Math.round(progress)}%`);
     
@@ -80,7 +81,6 @@ secondaryLoadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
 };
 
 secondaryLoadingManager.onLoad = () => {
-    console.log('All models loaded');
     const secondaryProgress = document.getElementById('secondary-progress');
     if (secondaryProgress) {
         secondaryProgress.style.display = 'none';
@@ -260,6 +260,8 @@ function setupPlainModel(plain: THREE.Group, animations: THREE.AnimationClip[]):
 
     const river = plain.getObjectByName('river');
     enableShadowsForModel(river!, 'RIVER');
+
+    ipadSliderSettings(plain);
 
     setupPlainMesh(plain);
     const plainTreesMesh = setupPlainTrees(plain);
