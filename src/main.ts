@@ -24,7 +24,7 @@ let scrollProgress = 0;
 let currentPosition = 0;
 let targetPosition = 0;
 
-studio.initialize();
+// studio.initialize();
 
 window.addEventListener("load", () => {
   const loader = document.getElementById("loader");

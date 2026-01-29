@@ -127,12 +127,12 @@ function generatePlanarUV(geometry: THREE.BufferGeometry) {
         } else if (useXZ) {
             u = (x - bbox.min.x) / width;
             v = (z - bbox.min.z) / depth;
-        } else { // useYZ
+        } else if (useYZ) { // useYZ
             u = (y - bbox.min.y) / height;
             v = (z - bbox.min.z) / depth;
         }
         
-        uvs.push(u, v);
+        uvs.push(u as number, v as number);
     }
     
     geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
